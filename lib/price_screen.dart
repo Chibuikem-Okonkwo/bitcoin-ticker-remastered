@@ -32,6 +32,7 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
+          getData();
         }
         );
       },
@@ -49,21 +50,21 @@ class _PriceScreenState extends State<PriceScreen> {
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedIndex) {
-        print(selectedIndex);
+          print(selectedIndex);
         },
       children: items,
     );
   }
 
-  String bitcoinValueInUSD = '?';
+  String bitcoinValue= '?';
 
   //11. Create an async method here await the coin data from coin_data.dart
   void getData() async {
     try {
-      double data = await CoinData().getCoinData();
+      double data = await CoinData().getCoinData(selectedCurrency);
       //13. We can't await in a setState(). So you have to separate it out into two steps.
       setState(() {
-        bitcoinValueInUSD = data.toStringAsFixed(0);
+        bitcoinValue = data.toStringAsFixed(0);
       });
     } catch (e) {
       print(e);
@@ -99,7 +100,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = $bitcoinValueInUSD USD',
+                  '1 BTC = $bitcoinValue $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
